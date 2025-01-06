@@ -1,0 +1,7 @@
+{
+  "project_name": "Scikit-image LoG detector",
+  "project_url": "https://github.com/scikit-image/scikit-image",
+  "package_name": "skimage",
+  "author": "EPFL Center for Imaging",
+  "python_version": "3.9"
+}

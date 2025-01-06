@@ -1,0 +1,10 @@
+package_name: "{{ cookiecutter.package_name }}"
+project_url: "{{ cookiecutter.project_url }}"
+serverkit_repo_url: "http://example.com/{{ cookiecutter.package_name }}"
+serverkit_author: "{{ cookiecutter.author }}"
+project_name: "{{ cookiecutter.project_name }}"
+description: "The project description was not filled in."
+used_for:
+  - "Segmentation"
+tags:
+  - "EPFL"
