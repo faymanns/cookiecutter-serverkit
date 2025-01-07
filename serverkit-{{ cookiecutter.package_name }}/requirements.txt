@@ -1,1 +1,2 @@
+imaging-server-kit
 {{ cookiecutter.package_name }}

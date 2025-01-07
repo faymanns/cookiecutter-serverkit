@@ -1,7 +1,8 @@
 from typing import List, Literal, Type
 from pathlib import Path
 import numpy as np
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, field_validator
+import uvicorn
 import skimage.io
 import imaging_server_kit as serverkit
 
@@ -35,7 +36,7 @@ class Parameters(BaseModel):
         },
     )
     # Numpy arrays should be validated:
-    @validator('image', pre=False, always=True)
+    @field_validator("image", mode="after")
     def decode_image_array(cls, v) -> np.ndarray:
         image_array = serverkit.decode_contents(v)
         if image_array.ndim not in [2, 3]:
@@ -63,7 +64,7 @@ class Server(serverkit.Server):
 
         segmentation_params = {}
 
-        return [(segmentation, segmentation_params, 'labels')]
+        return [(segmentation, segmentation_params, "labels")]
 
     def load_sample_images(self) -> List["np.ndarray"]:
         """Load one or multiple sample images."""
@@ -73,3 +74,6 @@ class Server(serverkit.Server):
 
 server = Server()
 app = server.app
+
+if __name__=='__main__':
+    uvicorn.run("main:app", host="0.0.0.0", port=8000)
