@@ -1,5 +1,5 @@
 services:
-  {{ cookiecutter.package_name }}:
+  {{ cookiecutter.project_slug }}:
     build:
       context: .
     ports:

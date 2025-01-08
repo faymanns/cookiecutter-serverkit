@@ -1,6 +1,6 @@
-package_name: "{{ cookiecutter.package_name }}"
+package_name: "{{ cookiecutter.project_slug }}"
 project_url: "{{ cookiecutter.project_url }}"
-serverkit_repo_url: "https://github.com/Imaging-Server-Kit/serverkit-{{ cookiecutter.package_name }}"
+serverkit_repo_url: "https://github.com/Imaging-Server-Kit/serverkit-{{ cookiecutter.project_slug }}"
 serverkit_author: "{{ cookiecutter.author }}"
 project_name: "{{ cookiecutter.project_name }}"
 description: "The project description was not filled in."
