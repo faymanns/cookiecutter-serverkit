@@ -1,7 +1,7 @@
 ![EPFL Center for Imaging logo](https://imaging.epfl.ch/resources/logo-for-gitlab.svg)
 # 🪐 Algorithm Server Template
 
-Use this [Cookiecutter](https://github.com/cookiecutter/cookiecutter) template to jumpstart [...]
+Use this [Cookiecutter](https://github.com/cookiecutter/cookiecutter) template to jumpstart the creation of your own Imaging Server Kit algorithm server.
 
 ## Usage
 
@@ -174,7 +174,7 @@ The images included in the `sample_images/` folder are served at the server's `/
 
 We recommend to provide only **small** sample images as (for now) they are included in the Git repository of the algorithm server.
 
-The license terms of the sample images used should be respected. For example, for images under [CC-BY](https://creativecommons.org/licenses/by/2.0/deed.en) license, a `notice.txt` file giving proper attribution should be included.
+The license terms of the sample images used should be respected. For example, for images under [CC-BY](https://creativecommons.org/licenses/by/2.0/deed.en) license, proper attribution should be included.
 
 ### Writing `unit tests`
 

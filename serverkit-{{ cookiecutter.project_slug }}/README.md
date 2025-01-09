@@ -87,3 +87,6 @@ docker tag serverkit-{{ cookiecutter.project_slug }} registry.rcp.epfl.ch/imagin
 docker push registry.rcp.epfl.ch/imaging-server-kit/serverkit-{{ cookiecutter.project_slug }}
 ```
 
+<!-- ## Sample images provenance -->
+
+<!-- Fill if necessary. -->

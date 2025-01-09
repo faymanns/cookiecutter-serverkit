@@ -1,4 +1,4 @@
-FROM registry.rcp.epfl.ch/imaging-server-kit/imaging-server-kit:{{ cookiecutter.python_version }}
+FROM mallorywittwerepfl/imaging-server-kit:{{ cookiecutter.python_version }}
 
 COPY . .
 
