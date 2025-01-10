@@ -29,7 +29,7 @@ class Parameters(BaseModel):
         json_schema_extra={"widget_type": "dropdown"},
     )
     threshold: float = Field(
-        default=0.5,
+        default=100.0,
         title="Threshold",
         description="",
         ge=0.0,  # Greater or equal to
@@ -64,7 +64,7 @@ class Server(serverkit.Server):
         **kwargs
     ) -> List[tuple]:
         """Runs the algorithm."""
-        segmentation = (image > threshold).astype(int)  # Adjust as necessary
+        segmentation = image > threshold  # Adjust as necessary
 
         segmentation_params = {"name": "Threshold result"}  # Add information about the result (optional)
         
