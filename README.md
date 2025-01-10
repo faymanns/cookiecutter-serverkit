@@ -74,14 +74,14 @@ class Parameters(BaseModel):
         json_schema_extra={"widget_type": "dropdown"},
     )
     threshold: float = Field(
-        default=0.5,
+        default=100.0,
         title="Threshold",
         description="",
         ge=0.0,  # Greater or equal to
-        le=1.0,  # Lower or equal to
+        le=255.0,  # Lower or equal to
         json_schema_extra={
             "widget_type": "float", 
-            "step": 0.05,  # The incremental step to use in the widget (only applicable to numbers)
+            "step": 1.0,  # The incremental step to use in the widget (only applicable to numbers)
         },
     )
     # Numpy arrays should be validated:
@@ -124,15 +124,15 @@ Here is the example from the template:
         self,
         image: np.ndarray,
         model_name: str,
-        threshold: float,  # Note: do not add default values here; instead, add them as `default=` in the Parameters model.
+        threshold: float,  # No need to add default values here; instead, add them as `default=` in the Parameters model.
         **kwargs
     ) -> List[tuple]:
-        """ Runs the algorithm. """
-        segmentation = np.zeros_like(image)  # Adjust as necessary
+        """Runs the algorithm."""
+        segmentation = image > threshold  # Adjust as necessary
 
-        segmentation_params = {}
-
-        return [(segmentation, segmentation_params, "labels")]
+        segmentation_params = {"name": "Threshold result"}  # Add information about the result (optional)
+        
+        return [(segmentation, segmentation_params, "labels")]  # Choose the right output type (`labels` for a segmentation mask)
 ```
 
 The body of the function should handle running your algorithm.
