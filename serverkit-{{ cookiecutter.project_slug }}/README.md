@@ -19,7 +19,7 @@ Run the server:
 uvicorn main:app --host 0.0.0.0 --port 8000
 ```
 
-The server will be running on http://localhost:8000.
+or run `python main.py`. The server will be running on http://localhost:8000.
 
 ## Endpoints
 
@@ -27,16 +27,16 @@ A documentation of the endpoints is automatically generated at http://localhost:
 
 **GET endpoints**
 
-- http://localhost:8000/: Listing of running algorithm servers.
-- http://localhost:8000/version: Version of the `imaging-server-kit` package.
-- http://localhost:8000/{{ cookiecutter.project_slug }}/info: Web page displaying project metadata.
-- http://localhost:8000/{{ cookiecutter.project_slug }}/demo: Plotly Dash web demo app.
-- http://localhost:8000/{{ cookiecutter.project_slug }}/parameters: Json Schema representation of algorithm parameters.
-- http://localhost:8000/{{ cookiecutter.project_slug }}/sample_images: Bytes string representation of the sample images.
+- http://localhost:8000/ : Listing of running algorithm servers.
+- http://localhost:8000/version : Version of the `imaging-server-kit` package.
+- http://localhost:8000/{{ cookiecutter.project_slug }}/info : Web page displaying project metadata.
+- http://localhost:8000/{{ cookiecutter.project_slug }}/demo : Plotly Dash web demo app.
+- http://localhost:8000/{{ cookiecutter.project_slug }}/parameters : Json Schema representation of algorithm parameters.
+- http://localhost:8000/{{ cookiecutter.project_slug }}/sample_images : Bytes string representation of the sample images.
 
 **POST endpoints**
 
-- http://localhost:8000/{{ cookiecutter.project_slug }}/process: Processing endpoint to run the algorithm.
+- http://localhost:8000/{{ cookiecutter.project_slug }}/process : Processing endpoint to run the algorithm.
 
 ## Running the server with `docker-compose`
 

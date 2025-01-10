@@ -1,4 +1,4 @@
-package_name: "{{ cookiecutter.project_slug }}"
+project_slug: "{{ cookiecutter.project_slug }}"
 project_url: "{{ cookiecutter.project_url }}"
 serverkit_repo_url: "https://github.com/Imaging-Server-Kit/serverkit-{{ cookiecutter.project_slug }}"
 serverkit_author: "{{ cookiecutter.author }}"

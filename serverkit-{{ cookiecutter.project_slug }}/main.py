@@ -1,3 +1,7 @@
+"""
+Algorithm server definition.
+Documentation: https://github.com/Imaging-Server-Kit/cookiecutter-serverkit
+"""
 from typing import List, Literal, Type
 from pathlib import Path
 import numpy as np
@@ -6,8 +10,8 @@ import uvicorn
 import skimage.io
 import imaging_server_kit as serverkit
 
-# Import your library
-import {{ cookiecutter.package_name }}
+# Import your package if needed (also add it to requirements.txt)
+# import [...]
 
 # Define a Pydantic BaseModel to validate your algorithm parameters
 class Parameters(BaseModel):
@@ -29,10 +33,10 @@ class Parameters(BaseModel):
         title="Threshold",
         description="",
         ge=0.0,  # Greater or equal to
-        le=1.0,  # Lower or equal to
+        le=255.0,  # Lower or equal to
         json_schema_extra={
             "widget_type": "float", 
-            "step": 0.05,  # The incremental step to use in the widget (only applicable to numbers)
+            "step": 1.0,  # The incremental step to use in the widget (only applicable to numbers)
         },
     )
     # Numpy arrays should be validated:
@@ -43,7 +47,7 @@ class Parameters(BaseModel):
             raise ValueError("Array has the wrong dimensionality.")
         return image_array
 
-# Define the run_algorithm() method for your algorithm
+# Write the run_algorithm() method for your algorithm
 class Server(serverkit.Server):
     def __init__(
         self,
@@ -56,18 +60,18 @@ class Server(serverkit.Server):
         self,
         image: np.ndarray,
         model_name: str,
-        threshold: float,  # Note: do not add default values here; instead, add them as `default=` in the Parameters model.
+        threshold: float,  # No need to add default values here; instead, add them as `default=` in the Parameters model.
         **kwargs
     ) -> List[tuple]:
-        """ Runs the algorithm. """
-        segmentation = np.zeros_like(image)  # Adjust as necessary
+        """Runs the algorithm."""
+        segmentation = (image > threshold).astype(int)  # Adjust as necessary
 
-        segmentation_params = {}
-
-        return [(segmentation, segmentation_params, "labels")]
+        segmentation_params = {"name": "Threshold result"}  # Add information about the result (optional)
+        
+        return [(segmentation, segmentation_params, "labels")]  # Choose the right output type (`labels` for a segmentation mask)
 
     def load_sample_images(self) -> List["np.ndarray"]:
-        """Load one or multiple sample images."""
+        """Loads one or multiple sample images."""
         image_dir = Path(__file__).parent / "sample_images"
         images = [skimage.io.imread(image_path) for image_path in image_dir.glob("*")]
         return images

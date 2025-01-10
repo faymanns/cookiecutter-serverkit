@@ -22,7 +22,6 @@ You'll be asked to provide:
 - **project_name**: The name of the algorithm or project (e.g. StarDist)
 - **project_url**: A URL to the original project homepage
 - **project_slug**: A lowercase, URL-friendly name for your project
-- **package_name**: A python package from which to install your algorithm
 - **author**: The author to credit for the algorithm server project development
 - **python_version**: The Python version to use
 
@@ -151,7 +150,6 @@ The data tuples follow the convention defined by Napari's [LayerDataTuple](https
   - `boxes`: A collection of boxes (array of shape (N, 4))
   - `vectors`: Array of vectors in the Napari Vectors data format
   - `tracks`: Array of tracks in the Napari Tracks data format
-
 
 
 **load_sample_image**

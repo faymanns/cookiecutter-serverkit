@@ -1,8 +1,7 @@
 {
-  "project_name": "Scikit-image LoG detector",
+  "project_name": "Binary Threshold",
   "project_url": "https://github.com/scikit-image/scikit-image",
-  "project_slug": "skimage-log",
-  "package_name": "scikit-image",
+  "project_slug": "threshold",
   "author": "EPFL Center for Imaging",
   "python_version": "3.9"
 }
