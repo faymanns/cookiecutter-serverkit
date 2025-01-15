@@ -53,7 +53,7 @@ The server will be running on http://localhost:8000.
 Build the docker image:
 
 ```
-docker build -t serverkit-{{ cookiecutter.project_slug }} .
+docker build --build-arg PYTHON_VERSION={{ cookiecutter.python_version }} -t serverkit-{{ cookiecutter.project_slug }} .
 ```
 
 Run the server in a container:
@@ -79,13 +79,6 @@ docker run --rm serverkit-{{ cookiecutter.project_slug }}:latest pytest
 ```
 
 to run the tests in a docker container.
-
-## [EPFL only] Publishing a docker image to [registry.rcp.epfl.ch](https://registry.rcp.epfl.ch/)
-
-```
-docker tag serverkit-{{ cookiecutter.project_slug }} registry.rcp.epfl.ch/imaging-server-kit/serverkit-{{ cookiecutter.project_slug }}
-docker push registry.rcp.epfl.ch/imaging-server-kit/serverkit-{{ cookiecutter.project_slug }}
-```
 
 <!-- ## Sample images provenance -->
 

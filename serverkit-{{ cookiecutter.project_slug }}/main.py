@@ -22,12 +22,14 @@ class Parameters(BaseModel):
         description="Input image (2D, 3D).",
         json_schema_extra={"widget_type": "image"},
     )
+    # Example `Dropdown` parameter:
     model_name: Literal['model1', 'model2'] = Field(
         default='model1',
         title="Model",
         description="Model description.",
         json_schema_extra={"widget_type": "dropdown"},
     )
+    # Example float value parameter (`int` and `bool` work similarly):
     threshold: float = Field(
         default=100.0,
         title="Threshold",
@@ -39,7 +41,7 @@ class Parameters(BaseModel):
             "step": 1.0,  # The incremental step to use in the widget (only applicable to numbers)
         },
     )
-    # Numpy arrays should be validated:
+    # This is optional, but numpy arrays can be validated:
     @field_validator("image", mode="after")
     def decode_image_array(cls, v) -> np.ndarray:
         image_array = serverkit.decode_contents(v)
