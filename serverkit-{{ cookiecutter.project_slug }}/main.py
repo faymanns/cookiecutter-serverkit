@@ -13,7 +13,7 @@ import imaging_server_kit as serverkit
 # Import your package if needed (also add it to requirements.txt)
 # import [...]
 
-# Define a Pydantic BaseModel to validate your algorithm parameters
+# Define a Pydantic BaseModel to validate your algorithm parameters and render them as UI elements (dropdowns, checkbox, etc.)
 class Parameters(BaseModel):
     """Defines the algorithm parameters"""
     image: str = Field(
