@@ -145,7 +145,8 @@ The data tuples follow the convention defined by Napari's [LayerDataTuple](https
   - `{"name": "Detected Keypoints"}
 - The *third element* represents the type of output: 
   - `image`: An image or image-like data (incl. 3D and RGB) as a nD array
-  - `labels`: A segmentation mask (2D, 3D) as integer nD array
+  - `labels`: A segmentation mask (2D, 3D) as integer nD array. Integers represent the **object class**.
+  - `instance_mask`: A segmentation mask (2D, 3D) as integer nD array. Integers represent **object instances**.
   - `points`: A collection of point coordinates (array of shape (N, 2) or (N, 3))
   - `boxes`: A collection of boxes (array of shape (N, 4))
   - `vectors`: Array of vectors in the Napari Vectors data format
