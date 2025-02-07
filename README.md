@@ -151,6 +151,8 @@ The data tuples follow the convention defined by Napari's [LayerDataTuple](https
   - `boxes`: A collection of boxes (array of shape (N, 4))
   - `vectors`: Array of vectors in the Napari Vectors data format
   - `tracks`: Array of tracks in the Napari Tracks data format
+  - `class`: A class label (for image classification)
+  - `text`: A string of text (for example, for image captioning)
 
 
 **load_sample_image**
