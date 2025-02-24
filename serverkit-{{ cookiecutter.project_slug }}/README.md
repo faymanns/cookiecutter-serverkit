@@ -3,8 +3,6 @@
 
 Implementation of a web server for [{{ cookiecutter.project_name }}]({{ cookiecutter.project_url }}).
 
-Author: {{ cookiecutter.author }}
-
 ## Installing the algorithm server with `pip`
 
 Install dependencies:
@@ -66,19 +64,17 @@ The server will be running on http://localhost:8000.
 
 ## Running unit tests
 
-If you have implemented unit tests in the [tests/](./tests/) folder, you can run them using pytest:
+The unit tests implemented in the [tests](./tests/) folder can be run using pytest:
 
 ```
 pytest
 ```
 
-if you are developing your server locally, or
+or directly in a docker container:
 
 ```
 docker run --rm serverkit-{{ cookiecutter.project_slug }}:latest pytest
 ```
-
-to run the tests in a docker container.
 
 <!-- ## Sample images provenance -->
 

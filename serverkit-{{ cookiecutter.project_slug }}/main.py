@@ -66,7 +66,7 @@ class Server(serverkit.Server):
         **kwargs
     ) -> List[tuple]:
         """Runs the algorithm."""
-        segmentation = image > threshold  # Adjust as necessary
+        segmentation = image > threshold  # Replace this with your code
 
         segmentation_params = {"name": "Threshold result"}  # Add information about the result (optional)
         

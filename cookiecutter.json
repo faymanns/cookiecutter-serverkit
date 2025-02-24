@@ -1,7 +1,6 @@
 {
   "project_name": "Binary Threshold",
-  "project_url": "https://github.com/scikit-image/scikit-image",
   "project_slug": "threshold",
-  "author": "EPFL Center for Imaging",
+  "project_url": "https://github.com/scikit-image/scikit-image",
   "python_version": "3.9"
 }
