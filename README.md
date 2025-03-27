@@ -132,7 +132,7 @@ Here is the example from the template:
 
         segmentation_params = {"name": "Threshold result"}  # Add information about the result (optional)
         
-        return [(segmentation, segmentation_params, "labels")]  # Choose the right output type (`labels` for a segmentation mask)
+        return [(segmentation, segmentation_params, "mask")]  # Choose the right output type (`mask` for a segmentation mask)
 ```
 
 The body of the function should handle running your algorithm.
@@ -145,7 +145,7 @@ The data tuples follow the convention defined by Napari's [LayerDataTuple](https
   - `{"name": "Detected Keypoints"}
 - The *third element* represents the type of output: 
   - `image`: An image or image-like data (incl. 3D and RGB) as a nD array
-  - `labels`: A segmentation mask (2D, 3D) as integer nD array. Integers represent the **object class**.
+  - `mask`: A segmentation mask (2D, 3D) as integer nD array. Integers represent the **object class**.
   - `instance_mask`: A segmentation mask (2D, 3D) as integer nD array. Integers represent **object instances**.
   - `points`: A collection of point coordinates (array of shape (N, 2) or (N, 3))
   - `boxes`: A collection of boxes (array of shape (N, 4))

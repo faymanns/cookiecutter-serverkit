@@ -70,7 +70,7 @@ class Server(serverkit.Server):
 
         segmentation_params = {"name": "Threshold result"}  # Add information about the result (optional)
         
-        return [(segmentation, segmentation_params, "labels")]  # Choose the right output type (`labels` for a segmentation mask)
+        return [(segmentation, segmentation_params, "mask")]  # Choose the right output type (`mask` for a segmentation mask)
 
     def load_sample_images(self) -> List["np.ndarray"]:
         """Loads one or multiple sample images."""
