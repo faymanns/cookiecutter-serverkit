@@ -2,6 +2,7 @@
 Algorithm server definition.
 Documentation: https://github.com/Imaging-Server-Kit/cookiecutter-serverkit
 """
+
 from typing import List, Literal, Type
 from pathlib import Path
 import numpy as np
@@ -13,9 +14,11 @@ import imaging_server_kit as serverkit
 # Import your package if needed (also add it to requirements.txt)
 # import [...]
 
+
 # Define a Pydantic BaseModel to validate your algorithm parameters and render them as UI elements (dropdowns, checkbox, etc.)
 class Parameters(BaseModel):
     """Defines the algorithm parameters"""
+
     image: str = Field(
         ...,
         title="Image",
@@ -23,8 +26,8 @@ class Parameters(BaseModel):
         json_schema_extra={"widget_type": "image"},
     )
     # Example `Dropdown` parameter:
-    model_name: Literal['model1', 'model2'] = Field(
-        default='model1',
+    model_name: Literal["model1", "model2"] = Field(
+        default="model1",
         title="Model",
         description="Model description.",
         json_schema_extra={"widget_type": "dropdown"},
@@ -37,10 +40,11 @@ class Parameters(BaseModel):
         ge=0.0,  # Greater or equal to
         le=255.0,  # Lower or equal to
         json_schema_extra={
-            "widget_type": "float", 
+            "widget_type": "float",
             "step": 1.0,  # The incremental step to use in the widget (only applicable to numbers)
         },
     )
+
     # This is optional, but numpy arrays can be validated:
     @field_validator("image", mode="after")
     def decode_image_array(cls, v) -> np.ndarray:
@@ -49,12 +53,13 @@ class Parameters(BaseModel):
             raise ValueError("Array has the wrong dimensionality.")
         return image_array
 
+
 # Write the run_algorithm() method for your algorithm
-class Server(serverkit.Server):
+class Server(serverkit.AlgorithmServer):
     def __init__(
         self,
-        algorithm_name: str="{{ cookiecutter.project_slug }}",
-        parameters_model: Type[BaseModel]=Parameters
+        algorithm_name: str = "{{ cookiecutter.project_slug }}",
+        parameters_model: Type[BaseModel] = Parameters,
     ):
         super().__init__(algorithm_name, parameters_model)
 
@@ -68,9 +73,13 @@ class Server(serverkit.Server):
         """Runs the algorithm."""
         segmentation = image > threshold  # Replace this with your code
 
-        segmentation_params = {"name": "Threshold result"}  # Add information about the result (optional)
-        
-        return [(segmentation, segmentation_params, "mask")]  # Choose the right output type (`mask` for a segmentation mask)
+        segmentation_params = {
+            "name": "Threshold result"
+        }  # Add information about the result (optional)
+
+        return [
+            (segmentation, segmentation_params, "mask")
+        ]  # Choose the right output type (`mask` for a segmentation mask)
 
     def load_sample_images(self) -> List["np.ndarray"]:
         """Loads one or multiple sample images."""
@@ -78,8 +87,9 @@ class Server(serverkit.Server):
         images = [skimage.io.imread(image_path) for image_path in image_dir.glob("*")]
         return images
 
+
 server = Server()
 app = server.app
 
-if __name__=='__main__':
+if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8000)
