@@ -1,7 +1,7 @@
 ![EPFL Center for Imaging logo](https://imaging.epfl.ch/resources/logo-for-gitlab.svg)
 # 🪐 Algorithm Server Template
 
-Use this [Cookiecutter](https://github.com/cookiecutter/cookiecutter) template to jumpstart the creation of your own Imaging Server Kit algorithm server.
+Use this [Cookiecutter](https://github.com/cookiecutter/cookiecutter) template to jumpstart the creation of your Imaging Server Kit algorithm server.
 
 ## Usage
 
@@ -21,11 +21,11 @@ You'll be asked to provide:
 
 - **project_name**: The name of the algorithm or project (e.g. StarDist)
 - **project_url**: A URL to the original project homepage
-- **project_slug**: A lowercase, URL-friendly name for your project
-- **author**: The author to credit for the algorithm server project development
+- **project_slug**: A lowercase, URL-friendly name for your project (e.g. stardist)
+- **author**: The author of the algorithm server
 - **python_version**: The Python version to use
 
-Running the cookiecutter will generate the following file structure for your algorithm server project:
+Running the cookiecutter will generate the following file structure for your algorithm server:
 
 ```
 serverkit-project-slug
@@ -42,21 +42,21 @@ serverkit-project-slug
 └── requirements.txt
 ```
 
-After generating the project, you should customize these files to implement the desired functionality of your algorithm server.
+After generating the project, you should edit these files to implement the desired functionality of your algorithm server.
 
 ### Editing `main.py`
 
-The `main.py` file implements a `Server` class for your algorithm, inheriting from the Imaging Server Kit's `Server` class. Moreover, it defines a `Parameters` model for your algorithm as a Pydantic `BaseModel`.
+The `main.py` file implements a server class for your algorithm, inheriting from the Imaging Server Kit's `AlgorithmServer` class. Moreover, it defines a `Parameters` model for your algorithm as a Pydantic `BaseModel`.
 
 **Parameters**
 
-The Parameters model is used to validate algorithm parameters that are sent as input to the processing endpoint of the server. If something is wrong with the parameters (for example, a `threshold` parameter exceeds the maximum value), the server will reply with a `403` error and an informative message will be displayed to the user.
+The Parameters model is used to validate algorithm parameters that are sent to the server. If something is wrong with the parameters (for example, a `threshold` parameter exceeds the maximum value), the server will reply with a `403` error and an informative message will be displayed to the user.
 
-The **class attributes** of the Parameters model should match the parameters of your server's `run_algorithm` method (see below).
+The **class attributes** of the Parameters model represent the parameters of your algorithm. They should match the parameters of your server's `run_algorithm` method (see below).
 
-The Parameters model also provides default values, and metadata (title, description...) about each parameter. Finally, it provides information on how the user interface should look in client apps (dropdown, float slider, etc.) for each parameter.
+The Parameters model also declares default values, metadata (title, description...), and  what the user interface should be in client apps (dropdown, slider..) for each parameter.
 
-Here is the example from the template:
+Here is an example of a Parameters model for a simple binary threshold:
 
 ```{python}
 class Parameters(BaseModel):
@@ -67,77 +67,66 @@ class Parameters(BaseModel):
         description="Input image (2D, 3D).",
         json_schema_extra={"widget_type": "image"},
     )
-    model_name: Literal['model1', 'model2'] = Field(
-        default='model1',
-        title="Model",
-        description="Model description.",
-        json_schema_extra={"widget_type": "dropdown"},
-    )
     threshold: float = Field(
         default=100.0,
         title="Threshold",
-        description="",
+        description="Threshold value to use",
         ge=0.0,  # Greater or equal to
         le=255.0,  # Lower or equal to
         json_schema_extra={
             "widget_type": "float", 
-            "step": 1.0,  # The incremental step to use in the widget (only applicable to numbers)
+            "step": 1.0,  # The incremental step to use in the widget
         },
     )
-    # Numpy arrays should be validated:
-    @field_validator("image", mode="after")
-    def decode_image_array(cls, v) -> np.ndarray:
-        image_array = serverkit.decode_contents(v)
-        if image_array.ndim not in [2, 3]:
-            raise ValueError("Array has the wrong dimensionality.")
-        return image_array
 ```
 
-This example shows how to validate three parameters:
+In this example, two parameters are validated:
 
-- `image`: Input image. Numpy arrays, such as the input image, are sent to the server as byte strings. To validate properties of the (decoded) image, such as its dimensionality or intensity range, a `field_validator` can be used (see the example in the template). The three dots (`...`) indicate that this parameter is required, but *does not* have a default value.
-- `model_name`: A choice of values, such as the model name, can be represented using `Literal['v1', 'v2']` and a `widget_type: "dropdown"`.
+- `image`: Numpy arrays, such as the input image, are sent to the server as byte strings (hence the "str" type). The three dots (`...`) indicate that this parameter is required, but *does not* have a default value.
 - `threshold`: A numeric value, such as a threshold, can be represented as a `widget_type: "float"`.
+
+```{tip}
+To implement a choice of predefined values, the type `Literal['value1', 'value2']` and a `widget_type: "dropdown"` can be used.
+```
 
 Supported widget types:
 
-- `bool`
-- `float`
-- `int`
-- `str`
-- `dropdown`
-- `image`
-- `labels`
-- `points`
-- `shapes`
-- `vectors`
-- `tracks`
+- `bool` - A boolean value (checkbox)
+- `float` - A floating point value
+- `int` - An integer value
+- `str` - A string of text
+- `dropdown` - A choice of predefined values in a dropdown widget
+- `image` - [Image data](https://napari.org/stable/howtos/layers/image.html) (Napari format)
+- `labels` - [Segmentation masks](https://napari.org/stable/howtos/layers/labels.html) (Napari format)
+- `points` - [Points](https://napari.org/stable/howtos/layers/points.html) data (Napari format)
+- `shapes` - [Polygons](https://napari.org/stable/howtos/layers/shapes.html) (Napari format)
+- `vectors` - [Vectors](https://napari.org/stable/howtos/layers/vectors.html) data (Napari format)
+- `tracks` - [Tracks](https://napari.org/stable/howtos/layers/tracks.html) data (Napari format)
 
 **run_algorithm**
 
 Your algorithm server class should implement the `run_algorithm()` method. Function parameters should match the class attributes of the Pydantic `Parameters` model, which define the input parameters of your algorithm.
 
-Here is the example from the template:
+Here is an example for a simple threshold algorithm:
 
 ```{python}
     def run_algorithm(
         self,
         image: np.ndarray,
-        model_name: str,
-        threshold: float,  # No need to add default values here; instead, add them as `default=` in the Parameters model.
+        threshold: float,
         **kwargs
     ) -> List[tuple]:
-        """Runs the algorithm."""
+        """Runs a simple threshold."""
         segmentation = image > threshold  # Adjust as necessary
 
-        segmentation_params = {"name": "Threshold result"}  # Add information about the result (optional)
+        segmentation_params = {"name": "Threshold result"}
         
-        return [(segmentation, segmentation_params, "mask")]  # Choose the right output type (`mask` for a segmentation mask)
+        return [(segmentation, segmentation_params, "mask")]
 ```
 
 The body of the function should handle running your algorithm.
 
-The **return type** of the function should be a list of tuples ("data tuples"). Each data tuple represents an output of your algorithm.
+The **return type** of the function should be a list of tuples ("data tuples"). Each data tuple represents one of your algorithm.
 
 The data tuples follow the convention defined by Napari's [LayerDataTuple](https://napari.org/0.4.15/guides/magicgui.html?highlight=layerdatatuple) annotation.
 - The *first element* of the tuple is the data in the form of a Numpy array. 
@@ -157,11 +146,11 @@ The data tuples follow the convention defined by Napari's [LayerDataTuple](https
 
 **load_sample_image**
 
-Your server class should also implement the `load_sample_images()` method to define how the sample images are loaded (see dedicated section below).
+Your server class can also implement the `load_sample_images()` method to define how the sample images are loaded.
 
 ### Editing `metadata.yaml`
 
-This metadata file gathers information about the algorithm, which is displayed at the server's `/info` endpoint. Most of it should already be pre-filled from the cookiecutter template. Extra fields to edit include:
+This metadata file gathers information about the algorithm, which is displayed at the server's `/info` endpoint. Most of it should already be pre-filled from the cookiecutter template. Extra fields to consider editing include:
 
 | Key           | Description                                                                                                                      |
 | ------------- | -------------------------------------------------------------------------------------------------------------------------------- |
@@ -171,7 +160,7 @@ This metadata file gathers information about the algorithm, which is displayed a
 
 ### Providing `sample images`
 
-The images included in the `sample_images/` folder are served at the server's `/sample_images` endpoint. By default, they are read using the `skimage.io.imread` function, which is compatible with most common image formats (`.tif`, `.png`, `.jpg`). To match specific use cases, the `load_sample_images()` method in `main.py` can be edited.
+The images included in the `sample_images/` folder are served at the server's `/sample_images` endpoint. By default, the sample images are read using `skimage.io.imread`, which is compatible with most common image formats (`.tif`, `.png`, `.jpg`). To match specific use cases, the `load_sample_images()` method in `main.py` can be edited.
 
 We recommend to provide only **small** sample images as (for now) they are included in the Git repository of the algorithm server.
 
@@ -179,7 +168,7 @@ The license terms of the sample images used should be respected. For example, fo
 
 ### Writing `unit tests`
 
-The template includes an example test in the `tests/` folder. You can use this test to verify that the algorithm runs successfully on the provided sample images and returns the expected results. Other unit tests can be added if necessary.
+The template includes an example test in the `tests/` folder. You can use this test to verify that the algorithm runs successfully on the provided sample images and returns the expected results. Other unit tests can be added as necessary.
 
 ### Other files to edit
 
