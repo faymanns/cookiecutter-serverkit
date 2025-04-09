@@ -2,5 +2,6 @@
   "project_name": "Binary Threshold",
   "project_slug": "threshold",
   "project_url": "https://github.com/scikit-image/scikit-image",
+  "author": "John Doe",
   "python_version": "3.9"
 }
